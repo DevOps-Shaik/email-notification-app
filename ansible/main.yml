@@ -24,12 +24,16 @@
         owner: "{{ ansible_user }}"
         group: "{{ ansible_user }}"
     - name: Update yum cache
-      yum:
-        update_cache: yes
-    - name: Install OpenJDK 17
-      yum:
-        name: openjdk-17-jdk
-        state: present
+  yum:
+    name: '*'
+    state: latest
+  become: yes
+
+- name: Install OpenJDK 17
+  yum:
+    name: java-17-openjdk-devel
+    state: present
+  become: yes
     - name: Find Java 17 executable
       shell: "update-alternatives --query java | grep 'Value: ' | awk '{ print $2 }'"
       register: java_executable
